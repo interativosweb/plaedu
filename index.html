@@ -3,36 +3,33 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Plataforma • Atividades</title>
+  <title>MathFlow • Plataforma</title>
 
   <style>
     :root{
-      /* Base */
-      --bg: #cfd5db;
-      --paper: #f6f7f9;
-      --ink: #0d1220;
-      --muted: rgba(13,18,32,.62);
+      /* Paleta inspirada na imagem */
+      --bg: #dadada;            /* fundo externo */
+      --shell: #eceef1;         /* “moldura” clara */
+      --paper: #f6f7f8;         /* superfícies */
+      --ink: #121316;           /* texto principal */
+      --muted: rgba(18,19,22,.62);
 
-      /* Dark panel */
-      --nav: #14162a;
-      --nav2:#0f1022;
+      --card-dark: #303234;     /* card grande escuro */
+      --card-soft: #d5d8dc;     /* card cinza */
+      --lime: #B8F04B;          /* verde-limão */
+      --line: rgba(18,19,22,.10);
 
-      /* Vibrantes */
-      --yellow:#F5B400;
-      --orange:#FF4A1A;
-      --blue:#2A63FF;
-      --cyan:#12D6FF;
+      --r-xl: 34px;
+      --r-lg: 26px;
+      --r-md: 18px;
 
-      --shadow: 0 28px 80px rgba(0,0,0,.20);
-      --shadow2: 0 14px 40px rgba(0,0,0,.18);
+      --shadow: 0 22px 70px rgba(0,0,0,.16);
+      --shadow2: 0 16px 44px rgba(0,0,0,.12);
 
-      --r: 18px;
-      --r2: 22px;
-
-      --gridGap: 14px;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
 
-    *{ box-sizing: border-box; }
+    *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
@@ -41,26 +38,26 @@
       color: var(--ink);
     }
 
-    /* ---------- Layout frame ---------- */
     .stage{
-      min-height: 100%;
+      min-height:100%;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 26px 16px;
+      padding: 28px 16px 44px;
     }
 
-    .frame{
-      width: min(1180px, 100%);
-      border-radius: var(--r2);
-      background: #ffffff;
+    .shell{
+      width: min(1200px, 100%);
+      background: var(--shell);
+      border-radius: var(--r-xl);
       box-shadow: var(--shadow);
-      overflow:hidden;
+      padding: 18px;
       position: relative;
+      overflow:hidden;
     }
 
-    /* subtle grain */
-    .frame::after{
+    /* leve granulado */
+    .shell::after{
       content:"";
       position:absolute;
       inset:0;
@@ -70,457 +67,399 @@
       mix-blend-mode:multiply;
     }
 
-    /* ---------- Login view (inspirado no grid editorial) ---------- */
-    .loginView{
-      display:grid;
-      grid-template-columns: 260px 1fr 360px;
-      min-height: 620px;
-    }
-
-    /* Left nav */
-    .nav{
-      background: linear-gradient(180deg, var(--nav), var(--nav2));
-      color: rgba(255,255,255,.92);
-      padding: 22px 18px;
-      position: relative;
-    }
-
-    .brandMark{
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      background:
-        linear-gradient(90deg, var(--yellow) 0 26%, var(--orange) 26% 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 950;
-      letter-spacing: .5px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.35);
-      margin-bottom: 18px;
-      user-select:none;
-    }
-    .brandMark span{
-      width: 100%;
-      height: 100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(0,0,0,.18);
-      border-radius: 14px;
-      color: white;
-      font-size: 20px;
-    }
-
-    .nav h1{
-      margin: 0 0 10px;
-      font-size: 14px;
-      letter-spacing: .3px;
-      font-weight: 850;
-    }
-    .nav p{
-      margin: 0 0 18px;
-      font-size: 12px;
-      color: rgba(255,255,255,.70);
-      line-height: 1.5;
-    }
-
-    .navList{
-      margin-top: 22px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      font-size: 11px;
-      letter-spacing: .4px;
-      color: rgba(255,255,255,.70);
-      user-select:none;
-    }
-    .navList .active{
-      color: rgba(255,255,255,.92);
-      font-weight: 800;
-    }
-
-    /* Center editorial */
-    .hero{
+    .app{
       background: var(--paper);
-      padding: 26px 26px 22px;
-      display:grid;
-      grid-template-rows: auto 1fr auto;
+      border-radius: calc(var(--r-xl) - 8px);
+      border: 1px solid rgba(18,19,22,.08);
+      padding: 16px;
       position: relative;
-      overflow:hidden;
+      z-index: 1;
     }
 
-    .heroTop{
+    /* Topbar */
+    .topbar{
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content:space-between;
-      gap: 16px;
+      gap: 14px;
+      padding: 6px 8px 14px;
     }
 
-    .bigTitle{
-      margin: 0;
-      font-size: clamp(28px, 3.4vw, 44px);
-      line-height: 1.03;
-      letter-spacing: -0.8px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .logo{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      background: radial-gradient(circle at 30% 30%, #fff, #cfcfcf);
+      border: 1px solid rgba(18,19,22,.10);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
       font-weight: 950;
+      letter-spacing: .2px;
     }
-    .bigTitle .accent{
-      background: linear-gradient(90deg, var(--orange), var(--yellow));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+
+    .brand strong{
+      font-weight: 950;
+      letter-spacing: .2px;
+      font-size: 14px;
     }
-    .heroSub{
-      margin: 10px 0 0;
+    .brand span{
+      display:block;
+      font-size: 12px;
       color: var(--muted);
-      font-size: 13px;
-      max-width: 58ch;
-      line-height: 1.6;
+      margin-top: 2px;
     }
 
-    .heroMedia{
-      margin-top: 18px;
-      border-radius: var(--r2);
-      border: 1px solid rgba(13,18,32,.10);
-      background:
-        radial-gradient(600px 240px at 30% 20%, rgba(42,99,255,.16), transparent 60%),
-        radial-gradient(520px 220px at 70% 35%, rgba(18,214,255,.16), transparent 60%),
-        linear-gradient(180deg, #f2f4f7, #eceff3);
-      box-shadow: var(--shadow2);
-      position: relative;
-      overflow:hidden;
+    .navLinks{
       display:flex;
+      gap: 18px;
       align-items:center;
-      justify-content:center;
-      min-height: 280px;
+      color: rgba(18,19,22,.72);
+      font-size: 12px;
+      font-weight: 750;
+      flex-wrap: wrap;
     }
-
-    /* elemento “produto” abstrato */
-    .orb{
-      width: 190px;
-      height: 190px;
-      border-radius: 32px;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.92), rgba(255,255,255,.40) 55%, rgba(255,255,255,.12) 70%),
-        linear-gradient(135deg, rgba(42,99,255,.55), rgba(18,214,255,.45));
-      transform: rotate(-14deg);
-      box-shadow:
-        0 40px 90px rgba(0,0,0,.18),
-        inset 0 1px 0 rgba(255,255,255,.65);
-      position: relative;
-    }
-    .orb::after{
-      content:"";
-      position:absolute;
-      inset: 16px;
-      border-radius: 26px;
-      background: linear-gradient(135deg, rgba(255,74,26,.20), rgba(245,180,0,.18));
-      mix-blend-mode: multiply;
-    }
-
-    .heroBottom{
-      display:flex;
-      justify-content:flex-end;
-      align-items:center;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 12px;
+    .navLinks a{
+      padding: 8px 10px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 850;
-      border: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.75);
-      color: rgba(13,18,32,.86);
-      user-select:none;
+      transition: background .15s var(--ease);
     }
-    .dot{
-      width: 10px; height: 10px; border-radius: 99px;
-      background: linear-gradient(180deg, var(--orange), var(--yellow));
+    .navLinks a:hover{
+      background: rgba(18,19,22,.06);
     }
 
-    /* Right login panel */
-    .auth{
-      background: #ffffff;
-      padding: 26px 22px;
-      border-left: 1px solid rgba(13,18,32,.10);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      position: relative;
-    }
-
-    .authCard{
-      border-radius: var(--r2);
-      background:
-        radial-gradient(420px 180px at 80% 10%, rgba(255,74,26,.20), transparent 60%),
-        radial-gradient(420px 180px at 15% 25%, rgba(245,180,0,.18), transparent 60%),
-        radial-gradient(420px 180px at 30% 95%, rgba(42,99,255,.14), transparent 60%),
-        #ffffff;
-      border: 1px solid rgba(13,18,32,.10);
-      box-shadow: var(--shadow2);
-      padding: 18px;
-    }
-
-    .authCard h2{
-      margin: 0 0 10px;
-      font-size: 14px;
-      letter-spacing: .2px;
-      font-weight: 950;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    label{
-      font-size: 12px;
-      font-weight: 850;
-      color: rgba(13,18,32,.78);
-      letter-spacing: .2px;
-    }
-    input{
-      border-radius: 14px;
-      border: 1px solid rgba(13,18,32,.14);
-      background: rgba(255,255,255,.85);
-      padding: 12px 12px;
-      font-size: 14px;
-      outline:none;
-      transition: box-shadow .12s ease, border-color .12s ease;
-    }
-    input:focus{
-      border-color: rgba(255,74,26,.55);
-      box-shadow: 0 0 0 4px rgba(255,74,26,.14);
-    }
-
-    .row{
+    .topActions{
       display:flex;
       gap: 10px;
-      justify-content:flex-end;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-
-    .btn{
-      border-radius: 14px;
-      border: 1px solid rgba(13,18,32,.12);
-      background: rgba(255,255,255,.90);
-      padding: 12px 14px;
-      font-size: 12px;
-      font-weight: 950;
-      cursor:pointer;
-      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-      user-select:none;
-    }
-    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(0,0,0,.10); }
-    .btn:active{ transform: translateY(0px); }
-
-    .btn.primary{
-      color: white;
-      border-color: rgba(0,0,0,.0);
-      background: linear-gradient(90deg, var(--orange), var(--yellow));
-      box-shadow: 0 18px 44px rgba(255,74,26,.18);
-    }
-
-    .msg{
-      margin-top: 10px;
-      font-size: 12px;
-      color: rgba(13,18,32,.72);
-      min-height: 16px;
-    }
-    .msg.bad{ color: rgba(200,30,30,.92); }
-    .msg.ok{ color: rgba(0,150,90,.92); }
-
-    /* ---------- App view (grid gigante) ---------- */
-    .appView{
-      display:none;
-      min-height: 640px;
-      background:
-        radial-gradient(900px 500px at 20% 10%, rgba(255,74,26,.18), transparent 60%),
-        radial-gradient(900px 500px at 85% 15%, rgba(245,180,0,.18), transparent 60%),
-        radial-gradient(900px 500px at 55% 100%, rgba(42,99,255,.14), transparent 60%),
-        #ffffff;
-    }
-
-    .appTop{
-      padding: 18px 18px 0;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 12px;
-    }
-
-    .appTitle{
-      display:flex;
       align-items:center;
-      gap: 12px;
-    }
-    .appTitle h2{
-      margin:0;
-      font-size: 14px;
-      font-weight: 950;
-      letter-spacing: .2px;
-    }
-    .appTitle p{
-      margin: 4px 0 0;
-      font-size: 12px;
-      color: rgba(13,18,32,.62);
+      justify-content:flex-end;
+      flex-wrap: wrap;
+      min-width: 240px;
     }
 
-    .appActions{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content:flex-end;
-    }
-    .pill{
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(13,18,32,.10);
+    .pillBtn{
+      border: 1px solid rgba(18,19,22,.12);
       background: rgba(255,255,255,.75);
+      padding: 10px 14px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 900;
-      color: rgba(13,18,32,.80);
+      cursor:pointer;
+      transition: transform .12s var(--ease), box-shadow .12s var(--ease), background .12s var(--ease);
+      user-select:none;
+    }
+    .pillBtn:hover{ transform: translateY(-1px); box-shadow: 0 14px 26px rgba(0,0,0,.10); }
+    .pillBtn:active{ transform: translateY(0px); }
+
+    .pillBtn.dark{
+      background: #16171a;
+      color: rgba(255,255,255,.94);
+      border-color: rgba(0,0,0,0);
     }
 
-    .btn.dark{
-      background: linear-gradient(180deg, #171a2f, #0f1022);
-      color: rgba(255,255,255,.92);
-      border-color: rgba(255,255,255,.14);
-      box-shadow: 0 18px 44px rgba(0,0,0,.18);
-    }
-
-    .gridWrap{
-      padding: 14px 18px 20px;
-    }
-
-    /* Grid gigante adaptável */
-    .grid{
+    /* Layout principal (tipo a imagem: bloco grande + 2 menores à direita) */
+    .layout{
       display:grid;
-      gap: var(--gridGap);
-      grid-template-columns: repeat(12, 1fr);
+      grid-template-columns: 1.6fr 1fr;
+      gap: 14px;
       align-items: stretch;
     }
 
-    /* Blocos quadrados-ish e responsivos */
-    .tile{
-      grid-column: span 6;
-      min-height: 160px;
-      border-radius: 16px; /* levemente arredondado */
-      border: 1px solid rgba(13,18,32,.10);
+    /* Cards base */
+    .card{
+      border-radius: var(--r-lg);
+      border: 1px solid rgba(18,19,22,.10);
       box-shadow: var(--shadow2);
-      background: rgba(255,255,255,.78);
       overflow:hidden;
       position: relative;
-      cursor:pointer;
-      transform: translateY(0);
-      transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+      background: white;
     }
 
-    /* hover interativo */
-    .tile::before{
+    /* HERO (esquerda) */
+    .hero{
+      background: var(--card-dark);
+      color: rgba(255,255,255,.94);
+      padding: 26px;
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 520px;
+      border-color: rgba(255,255,255,.10);
+    }
+
+    .heroTitle{
+      margin: 0;
+      font-size: clamp(34px, 4.2vw, 58px);
+      line-height: .95;
+      letter-spacing: -1px;
+      font-weight: 950;
+    }
+    .heroTitle .thin{
+      font-weight: 850;
+      opacity: .92;
+    }
+    .heroSub{
+      margin: 14px 0 0;
+      color: rgba(255,255,255,.74);
+      font-size: 12px;
+      max-width: 55ch;
+      line-height: 1.55;
+    }
+
+    /* “Imagem” abstrata de matemática */
+    .mathArt{
+      margin-top: 18px;
+      border-radius: 28px;
+      background: radial-gradient(700px 340px at 60% 40%, rgba(255,255,255,.10), transparent 65%);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+      overflow:hidden;
+      min-height: 260px;
+    }
+
+    .mathArt .formula{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New";
+      font-size: clamp(16px, 2.2vw, 24px);
+      color: rgba(255,255,255,.82);
+      letter-spacing: .2px;
+      text-align:left;
+      line-height: 1.7;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 22px 60px rgba(0,0,0,.35);
+    }
+
+    .mathArt::before{
       content:"";
       position:absolute;
-      inset:-60%;
-      opacity:.0;
-      transition: opacity .16s ease;
-      transform: rotate(10deg);
-      pointer-events:none;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(184,240,75,.55), transparent 60%);
+      filter: blur(2px);
+      right: -60px;
+      bottom: -80px;
+      opacity:.9;
     }
-    .tile:hover{
-      transform: translateY(-6px);
-      box-shadow: 0 28px 70px rgba(0,0,0,.18);
-      filter: saturate(1.15);
+    .mathArt::after{
+      content:"";
+      position:absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 30px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.60), rgba(255,255,255,.10) 60%);
+      transform: rotate(-12deg);
+      left: 18%;
+      top: 22%;
+      opacity:.18;
     }
-    .tile:hover::before{ opacity: .85; }
 
-    .tileInner{
-      position: relative;
-      height:100%;
-      padding: 16px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap: 10px;
-    }
-
-    .tileName{
-      font-weight: 950;
-      letter-spacing: -0.2px;
-      font-size: 18px;
-      line-height: 1.1;
-    }
-    .tileMeta{
+    /* CTA area inferior do hero */
+    .heroFooter{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 10px;
-      font-size: 12px;
-      font-weight: 850;
-      color: rgba(13,18,32,.70);
+      gap: 12px;
+      margin-top: 18px;
     }
-    .tag{
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(13,18,32,.06);
-      border: 1px solid rgba(13,18,32,.08);
-      max-width: 70%;
+
+    .miniSelect{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      background: rgba(255,255,255,.86);
+      color: rgba(18,19,22,.90);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.18);
       overflow:hidden;
+      min-width: 260px;
+    }
+    .miniSelect .left{
+      padding: 10px 12px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: rgba(18,19,22,.52);
+      border-right: 1px solid rgba(18,19,22,.10);
+    }
+    .miniSelect .mid{
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 950;
+      flex: 1;
       white-space: nowrap;
+      overflow:hidden;
       text-overflow: ellipsis;
     }
-    .play{
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
+    .miniSelect .icon{
+      width: 46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-left: 1px solid rgba(18,19,22,.10);
+      font-weight: 950;
+    }
+
+    .scrollBtn{
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.90);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: transform .12s var(--ease), background .12s var(--ease);
+      user-select:none;
+    }
+    .scrollBtn:hover{ transform: translateY(-2px); background: rgba(0,0,0,.28); }
+
+    /* Right side cards */
+    .rightCol{
+      display:grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .softCard{
+      background: var(--card-soft);
+      padding: 18px;
+      border-radius: var(--r-lg);
+      position: relative;
+      overflow:hidden;
+      border: 1px solid rgba(18,19,22,.10);
+      box-shadow: var(--shadow2);
+    }
+
+    .softTitle{
+      margin: 0;
+      font-size: 32px;
+      line-height: .95;
+      font-weight: 950;
+      letter-spacing: -.6px;
+    }
+    .softCard .arrow{
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      border: 1px solid rgba(18,19,22,.10);
+      background: rgba(255,255,255,.75);
       display:flex;
       align-items:center;
       justify-content:center;
       font-weight: 950;
-      background: rgba(255,255,255,.85);
-      border: 1px solid rgba(13,18,32,.10);
-      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      position:absolute;
+      left: 18px;
+      bottom: 18px;
+      cursor:pointer;
+      transition: transform .12s var(--ease);
+      user-select:none;
+    }
+    .softCard .arrow:hover{ transform: translateY(-2px); }
+
+    .sphere{
+      position:absolute;
+      width: 160px; height: 160px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, rgba(255,255,255,.10) 62%);
+      right: 18px;
+      bottom: 12px;
+      opacity:.85;
+      filter: drop-shadow(0 24px 40px rgba(0,0,0,.18));
+    }
+
+    .limeCard{
+      background: var(--lime);
+      padding: 18px;
+      border-radius: var(--r-lg);
+      position: relative;
+      overflow:hidden;
+      border: 1px solid rgba(18,19,22,.10);
+      box-shadow: var(--shadow2);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .limeSmall{
+      font-size: 12px;
+      font-weight: 850;
+      color: rgba(18,19,22,.70);
+    }
+    .limeBig{
+      margin: 0;
+      font-size: 40px;
+      line-height: .95;
+      font-weight: 950;
+      letter-spacing: -.8px;
+    }
+    .plane{
+      position:absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px; height: 44px;
+      border-radius: 16px;
+      border: 1px solid rgba(18,19,22,.10);
+      background: rgba(255,255,255,.70);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
       user-select:none;
     }
 
-    /* Variações de cor por tile */
-    .t-orange::before{ background: radial-gradient(circle at 30% 30%, rgba(255,74,26,.55), transparent 55%); }
-    .t-yellow::before{ background: radial-gradient(circle at 30% 30%, rgba(245,180,0,.55), transparent 55%); }
-    .t-blue::before{ background: radial-gradient(circle at 30% 30%, rgba(42,99,255,.50), transparent 55%); }
-    .t-cyan::before{ background: radial-gradient(circle at 30% 30%, rgba(18,214,255,.55), transparent 55%); }
-    .t-mix::before{
-      background:
-        radial-gradient(circle at 25% 30%, rgba(255,74,26,.50), transparent 55%),
-        radial-gradient(circle at 65% 45%, rgba(245,180,0,.45), transparent 55%),
-        radial-gradient(circle at 45% 80%, rgba(42,99,255,.35), transparent 55%);
+    /* ---------- Login box (no estilo da imagem, discreto) ---------- */
+    .loginBox{
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      z-index: 5;
     }
 
-    /* Layout responsivo tiles */
-    @media (min-width: 760px){
-      .tile{ grid-column: span 4; min-height: 190px; }
+    .loginBox .btnSmall{
+      border-radius: 999px;
+      border: 1px solid rgba(18,19,22,.10);
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      background: rgba(255,255,255,.75);
+      cursor:pointer;
+      transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+      user-select:none;
     }
-    @media (min-width: 1050px){
-      .tile{ grid-column: span 3; min-height: 210px; }
+    .loginBox .btnSmall:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.10);
+    }
+    .loginBox .btnSmall.dark{
+      background: #111214;
+      color: rgba(255,255,255,.92);
+      border-color: rgba(0,0,0,0);
     }
 
-    /* Login layout responsivo */
-    @media (max-width: 980px){
-      .loginView{ grid-template-columns: 1fr; }
-      .nav{ display:none; }
-      .auth{ border-left: none; border-top: 1px solid rgba(13,18,32,.10); }
-    }
-
-    /* ---------- Modal ---------- */
+    /* ---------- Modal Login ---------- */
     .backdrop{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.60);
+      background: rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
@@ -529,328 +468,366 @@
     }
     .modal{
       width: min(520px, 100%);
-      border-radius: 18px;
-      background: rgba(255,255,255,.92);
-      border: 1px solid rgba(13,18,32,.12);
+      border-radius: 22px;
+      background: rgba(246,247,248,.96);
+      border: 1px solid rgba(18,19,22,.12);
       box-shadow: var(--shadow);
       padding: 16px;
     }
-    .modal h3{
-      margin: 0 0 6px;
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .modalTop h3{
+      margin: 0;
       font-size: 14px;
       font-weight: 950;
     }
-    .modal p{
-      margin: 0 0 14px;
-      font-size: 12px;
-      color: rgba(13,18,32,.70);
-      line-height: 1.5;
-    }
-    .modalActions{
-      display:flex;
-      gap: 10px;
-      justify-content:flex-end;
-      flex-wrap: wrap;
+    .close{
+      width: 40px; height: 40px;
+      border-radius: 14px;
+      border: 1px solid rgba(18,19,22,.12);
+      background: rgba(255,255,255,.80);
+      cursor:pointer;
+      font-weight: 950;
     }
 
-    .hidden{ display:none !important; }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    label{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(18,19,22,.74);
+    }
+    input{
+      border-radius: 16px;
+      border: 1px solid rgba(18,19,22,.14);
+      background: rgba(255,255,255,.92);
+      padding: 12px 12px;
+      font-size: 14px;
+      outline:none;
+      transition: box-shadow .12s var(--ease), border-color .12s var(--ease);
+    }
+    input:focus{
+      border-color: rgba(184,240,75,.75);
+      box-shadow: 0 0 0 4px rgba(184,240,75,.25);
+    }
+
+    .modalActions{
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .btn{
+      border-radius: 999px;
+      border: 1px solid rgba(18,19,22,.12);
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 950;
+      background: rgba(255,255,255,.86);
+      cursor:pointer;
+      transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 26px rgba(0,0,0,.10); }
+    .btn:active{ transform: translateY(0px); }
+    .btn.primary{
+      background: #111214;
+      color: rgba(255,255,255,.94);
+      border-color: rgba(0,0,0,0);
+    }
+
+    .msg{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(18,19,22,.70);
+      min-height: 16px;
+    }
+    .msg.bad{ color: rgba(200,30,30,.92); }
+    .msg.ok{ color: rgba(0,150,90,.92); }
+
+    /* ---------- Atividades View ---------- */
+    .activitiesView{
+      display:none;
+      margin-top: 14px;
+    }
+
+    .gridHeader{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 8px 12px;
+    }
+
+    .gridHeader h2{
+      margin: 0;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: .2px;
+    }
+    .gridHeader p{
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .countPill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(18,19,22,.10);
+      background: rgba(255,255,255,.75);
+      font-size: 12px;
+      font-weight: 950;
+      color: rgba(18,19,22,.78);
+    }
+
+    .grid{
+      display:grid;
+      gap: 14px;
+      grid-template-columns: repeat(12, 1fr);
+      padding: 8px;
+    }
+
+    .tile{
+      grid-column: span 6;
+      border-radius: 18px;
+      border: 1px solid rgba(18,19,22,.10);
+      box-shadow: var(--shadow2);
+      background: white;
+      min-height: 170px;
+      overflow:hidden;
+      position: relative;
+      cursor:pointer;
+      transform: translateY(0);
+      transition: transform .16s var(--ease), box-shadow .16s var(--ease);
+    }
+    .tile:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 26px 64px rgba(0,0,0,.14);
+    }
+
+    .tile::before{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      transform: rotate(10deg);
+      opacity: 0;
+      transition: opacity .16s var(--ease);
+      pointer-events:none;
+    }
+    .tile:hover::before{ opacity: .85; }
+
+    .tileInner{
+      position: relative;
+      padding: 16px;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .tileName{
+      font-weight: 950;
+      letter-spacing: -.2px;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .tileMeta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      color: rgba(18,19,22,.68);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .tag2{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(18,19,22,.10);
+      background: rgba(18,19,22,.04);
+      max-width: 70%;
+      overflow:hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .go{
+      width: 40px; height: 40px;
+      border-radius: 16px;
+      border: 1px solid rgba(18,19,22,.10);
+      background: rgba(255,255,255,.80);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+      user-select:none;
+    }
+
+    /* cores por tile */
+    .c-dark::before{
+      background: radial-gradient(circle at 30% 30%, rgba(18,19,22,.18), transparent 55%);
+    }
+    .c-lime::before{
+      background: radial-gradient(circle at 30% 30%, rgba(184,240,75,.60), transparent 55%);
+    }
+    .c-soft::before{
+      background: radial-gradient(circle at 30% 30%, rgba(213,216,220,.65), transparent 55%);
+    }
+    .c-mix::before{
+      background:
+        radial-gradient(circle at 25% 30%, rgba(184,240,75,.55), transparent 55%),
+        radial-gradient(circle at 70% 45%, rgba(18,19,22,.10), transparent 55%);
+    }
+
+    @media (min-width: 760px){
+      .tile{ grid-column: span 4; min-height: 190px; }
+    }
+    @media (min-width: 1060px){
+      .tile{ grid-column: span 3; min-height: 210px; }
+    }
+
+    /* Responsivo layout inicial */
+    @media (max-width: 980px){
+      .layout{ grid-template-columns: 1fr; }
+      .rightCol{ grid-template-rows: auto auto; }
+      .hero{ min-height: 480px; }
+    }
   </style>
 </head>
 
 <body>
   <div class="stage">
-    <div class="frame" id="frame">
+    <div class="shell">
+      <div class="app">
 
-      <!-- LOGIN VIEW -->
-      <section class="loginView" id="loginView" aria-label="Login">
-
-        <aside class="nav">
-          <div class="brandMark" title="Plataforma">
-            <span>P</span>
-          </div>
-
-          <h1>PLATAFORMA</h1>
-          <p>Um painel dinâmico para abrir atividades rapidamente com seus alunos.</p>
-
-          <div class="navList">
-            <div class="active">INÍCIO</div>
-            <div>ATIVIDADES</div>
-            <div>TURMAS</div>
-            <div>RELATÓRIOS</div>
-          </div>
-        </aside>
-
-        <main class="hero">
-          <div>
-            <div class="heroTop">
-              <div>
-                <h2 class="bigTitle">
-                  Uma <span class="accent">plataforma</span><br>
-                  de atividades em grid.
-                </h2>
-                <p class="heroSub">
-                  Visual moderno, responsivo e vibrante. Entre e escolha uma atividade para trabalhar com a turma.
-                </p>
-              </div>
-            </div>
-
-            <div class="heroMedia" aria-hidden="true">
-              <div class="orb"></div>
-            </div>
-          </div>
-
-          <div class="heroBottom">
-            <span class="chip"><span class="dot"></span> Design dinâmico</span>
-            <span class="chip"><span class="dot"></span> Cores vivas</span>
-          </div>
-        </main>
-
-        <aside class="auth">
-          <div class="authCard">
-            <h2>Login</h2>
-
-            <div class="field">
-              <label for="user">Usuário</label>
-              <input id="user" autocomplete="username" placeholder="gilberto@gmail.com" />
-            </div>
-
-            <div class="field">
-              <label for="pass">Senha</label>
-              <input id="pass" type="password" autocomplete="current-password" placeholder="••••" />
-            </div>
-
-            <div class="row">
-              <button class="btn primary" id="loginBtn" type="button">Entrar</button>
-              <button class="btn" id="fillBtn" type="button">Preencher</button>
-            </div>
-
-            <div id="loginMsg" class="msg"></div>
-          </div>
-        </aside>
-
-      </section>
-
-      <!-- APP VIEW -->
-      <section class="appView" id="appView" aria-label="Atividades">
-
-        <header class="appTop">
-          <div class="appTitle">
-            <div class="brandMark" style="width:44px;height:44px;border-radius:14px;margin:0;box-shadow:none;">
-              <span style="border-radius:14px;font-size:16px;">P</span>
-            </div>
+        <!-- Topbar (parecida com a referência) -->
+        <div class="topbar">
+          <div class="brand">
+            <div class="logo">∑</div>
             <div>
-              <h2>Plataforma • Atividades</h2>
-              <p id="subtitle">Bem-vindo.</p>
+              <strong>MathFlow</strong>
+              <span>Plataforma de atividades de Matemática</span>
             </div>
           </div>
 
-          <div class="appActions">
-            <span class="pill" id="countPill">0 atividades</span>
-            <button class="btn dark" id="logoutBtn" type="button">Sair</button>
-          </div>
-        </header>
+          <nav class="navLinks" aria-label="Menu">
+            <a href="#" onclick="return false;">Atividades</a>
+            <a href="#" onclick="return false;">Conteúdos</a>
+            <a href="#" onclick="return false;">Turmas</a>
+            <a href="#" onclick="return false;">FAQ</a>
+          </nav>
 
-        <div class="gridWrap">
-          <div class="grid" id="grid"></div>
+          <div class="topActions">
+            <button class="pillBtn" id="openLoginBtn" type="button">Login</button>
+            <button class="pillBtn dark" id="enterBtn" type="button">Entrar</button>
+          </div>
         </div>
 
-      </section>
+        <!-- HOME (antes do login) -->
+        <section id="homeView">
+          <div class="layout">
+            <!-- Hero grande (esquerda) -->
+            <article class="card hero">
+              <div>
+                <h1 class="heroTitle">
+                  Matemática<br>
+                  <span class="thin">simples &amp; prática</span>
+                </h1>
+                <p class="heroSub">
+                  Uma plataforma visual para escolher atividades: operações, frações, geometria, proporção e lógica.
+                </p>
 
-    </div>
-  </div>
+                <div class="mathArt" aria-hidden="true">
+                  <div class="formula">
+                    f(x) = ax² + bx + c<br>
+                    3/4 + 2/5 = 23/20<br>
+                    área = πr²<br>
+                    razão = a/b
+                  </div>
+                </div>
+              </div>
 
-  <!-- MODAL -->
-  <div class="backdrop" id="backdrop" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h3 id="modalTitle">Atividade</h3>
-      <p id="modalBody">Deseja iniciar esta atividade?</p>
-      <div class="modalActions">
-        <button class="btn" id="closeModalBtn" type="button">Fechar</button>
-        <button class="btn primary" id="startBtn" type="button">Iniciar</button>
+              <div class="heroFooter">
+                <div class="miniSelect" title="Exemplo de atividade em destaque">
+                  <div class="left">DESTAQUE</div>
+                  <div class="mid">Desafios de Frações</div>
+                  <div class="icon">🧮</div>
+                </div>
+                <div class="scrollBtn" id="scrollToGrid" title="Ver atividades">↓</div>
+              </div>
+            </article>
+
+            <!-- Direita: card cinza + card verde -->
+            <aside class="rightCol">
+              <div class="softCard">
+                <h2 class="softTitle">Ver<br>conteúdos</h2>
+                <div class="sphere" aria-hidden="true"></div>
+                <div class="arrow" id="toTopics" title="Abrir">↗</div>
+              </div>
+
+              <div class="limeCard">
+                <div class="plane" aria-hidden="true">✉</div>
+                <div class="limeSmall">Precisa de ajuda com uma aula?</div>
+                <h2 class="limeBig">Planos<br>rápidos</h2>
+                <div style="color: rgba(18,19,22,.74); font-weight: 850; font-size: 12px;">
+                  Sugestões de atividades por tema.
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ACTIVITIES (depois do login) -->
+        <section class="activitiesView" id="activitiesView">
+          <div class="gridHeader">
+            <div>
+              <h2>Atividades de Matemática</h2>
+              <p>Clique em um bloco para iniciar com a turma.</p>
+            </div>
+            <div class="countPill" id="countPill">0 atividades</div>
+          </div>
+
+          <div class="grid" id="grid"></div>
+        </section>
+
       </div>
     </div>
   </div>
 
-  <script>
-    // Credenciais fixas (como você pediu)
-    const AUTH = { login: "gilberto@gmail.com", pass: "4241" };
+  <!-- Modal de Login -->
+  <div class="backdrop" id="backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalTop">
+        <h3>Login</h3>
+        <button class="close" id="closeLogin" type="button">✕</button>
+      </div>
 
-    // “Sessão” local (só pra lembrar que entrou)
-    const KEY_SESSION = "platform_session_editorial_v1";
+      <div class="field">
+        <label for="user">E-mail</label>
+        <input id="user" autocomplete="username" placeholder="gilberto@gmail.com" />
+      </div>
 
-    const $ = (id) => document.getElementById(id);
+      <div class="field">
+        <label for="pass">Senha</label>
+        <input id="pass" type="password" autocomplete="current-password" placeholder="4241" />
+      </div>
 
-    // Atividades (você pode trocar os nomes aqui)
-    const activities = [
-      { name: "Jogo de Soma e Subtração", tag: "Matemática", color: "t-orange" },
-      { name: "Desafios de Frações", tag: "6º ano", color: "t-yellow" },
-      { name: "Quiz de Geometria", tag: "Formas", color: "t-blue" },
-      { name: "Tabela Verdade (Lógica)", tag: "Raciocínio", color: "t-cyan" },
-      { name: "Problemas de Proporção", tag: "Regra de Três", color: "t-mix" },
-      { name: "Leitura Interativa", tag: "Português", color: "t-blue" },
-      { name: "Ciências: Corpo Humano", tag: "Biologia", color: "t-yellow" },
-      { name: "Mapa do Brasil", tag: "Geografia", color: "t-orange" }
-    ];
-
-    let currentActivity = null;
-
-    function greeting() {
-      const h = new Date().getHours();
-      if (h < 12) return "Bom dia";
-      if (h < 18) return "Boa tarde";
-      return "Boa noite";
-    }
-
-    function setSession(on) {
-      localStorage.setItem(KEY_SESSION, JSON.stringify({ on: !!on }));
-    }
-
-    function getSession() {
-      try {
-        return JSON.parse(localStorage.getItem(KEY_SESSION)) || { on:false };
-      } catch { return { on:false }; }
-    }
-
-    function showLogin() {
-      $("loginView").style.display = "grid";
-      $("appView").style.display = "none";
-      $("loginMsg").textContent = "";
-      $("user").value = "";
-      $("pass").value = "";
-      currentActivity = null;
-    }
-
-    function showApp() {
-      $("loginView").style.display = "none";
-      $("appView").style.display = "block";
-      $("subtitle").textContent = `${greeting()}, Gilberto. Selecione uma atividade.`;
-      renderGrid();
-    }
-
-    function renderGrid() {
-      const grid = $("grid");
-      grid.innerHTML = "";
-
-      $("countPill").textContent = `${activities.length} atividades`;
-
-      activities.forEach((a, idx) => {
-        const tile = document.createElement("div");
-        tile.className = `tile ${a.color}`;
-        tile.tabIndex = 0;
-        tile.setAttribute("role", "button");
-        tile.setAttribute("aria-label", `Abrir atividade ${a.name}`);
-
-        tile.innerHTML = `
-          <div class="tileInner">
-            <div class="tileName">${escapeHtml(a.name)}</div>
-            <div class="tileMeta">
-              <span class="tag">${escapeHtml(a.tag || "Atividade")}</span>
-              <span class="play">▶</span>
-            </div>
-          </div>
-        `;
-
-        tile.addEventListener("click", () => openActivity(a));
-        tile.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") openActivity(a);
-        });
-
-        grid.appendChild(tile);
-      });
-    }
-
-    function escapeHtml(str) {
-      return String(str).replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function doLogin() {
-      const u = $("user").value.trim();
-      const p = $("pass").value.trim();
-
-      if (!u || !p) {
-        $("loginMsg").textContent = "Preencha login e senha.";
-        $("loginMsg").className = "msg bad";
-        return;
-      }
-
-      if (u === AUTH.login && p === AUTH.pass) {
-        setSession(true);
-        $("loginMsg").textContent = "Acesso liberado.";
-        $("loginMsg").className = "msg ok";
-        setTimeout(showApp, 120);
-      } else {
-        $("loginMsg").textContent = "Login ou senha inválidos.";
-        $("loginMsg").className = "msg bad";
-      }
-    }
-
-    function logout() {
-      setSession(false);
-      showLogin();
-    }
-
-    // Modal
-    function openActivity(activity) {
-      currentActivity = activity;
-      $("modalTitle").textContent = activity.name;
-      $("modalBody").textContent = "Deseja iniciar esta atividade agora?";
-      $("backdrop").style.display = "flex";
-    }
-
-    function closeModal() {
-      $("backdrop").style.display = "none";
-      currentActivity = null;
-    }
-
-    function startActivity() {
-      // Aqui você pode trocar para abrir um link real (ex: window.open(activity.url, ...))
-      // Por enquanto só demonstra “dinâmica”
-      if (!currentActivity) return;
-
-      $("modalBody").textContent = "Atividade iniciada! (Você pode ligar isso a um link real.)";
-      $("startBtn").textContent = "OK";
-      $("startBtn").onclick = () => { closeModal(); resetStartBtn(); };
-    }
-
-    function resetStartBtn() {
-      $("startBtn").textContent = "Iniciar";
-      $("startBtn").onclick = startActivity;
-    }
-
-    // Init
-    function init() {
-      $("loginBtn").addEventListener("click", doLogin);
-      $("fillBtn").addEventListener("click", () => {
-        $("user").value = AUTH.login;
-        $("pass").value = AUTH.pass;
-        $("loginMsg").textContent = "Credenciais preenchidas.";
-        $("loginMsg").className = "msg ok";
-      });
-
-      $("logoutBtn").addEventListener("click", logout);
-
-      $("closeModalBtn").addEventListener("click", () => { closeModal(); resetStartBtn(); });
-      $("backdrop").addEventListener("click", (e) => {
-        if (e.target === $("backdrop")) { closeModal(); resetStartBtn(); }
-      });
-
-      $("startBtn").onclick = startActivity;
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && $("loginView").style.display !== "none") doLogin();
-        if (e.key === "Escape" && $("backdrop").style.display === "flex") { closeModal(); resetStartBtn(); }
-      });
-
-      const s = getSession();
-      if (s.on) showApp();
-      else showLogin();
-    }
-
-    init();
-  </script>
-</body>
-</html>
+      <div class="modalActions">
+        <button class="btn" id="fill" type="button">Preencher</button>
+        <button class="btn
