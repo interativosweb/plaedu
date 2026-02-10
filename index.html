@@ -830,4 +830,181 @@
 
       <div class="modalActions">
         <button class="btn" id="fill" type="button">Preencher</button>
-        <button class="btn
+        <button class="btn primary" id="login" type="button">Entrar</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  <script>
+    // Credenciais fixas (como você pediu)
+    const AUTH = { login: "gilberto@gmail.com", pass: "4241" };
+    const KEY_SESSION = "mathflow_session_v1";
+
+    const activities = [
+      { name: "Operações: Soma/Subtração", tag: "Fundamental", color: "c-lime", url: "#" },
+      { name: "Multiplicação & Divisão", tag: "Cálculo mental", color: "c-soft", url: "#" },
+      { name: "Frações na prática", tag: "Partes do todo", color: "c-mix", url: "#" },
+      { name: "Proporção & Regra de Três", tag: "Razão", color: "c-lime", url: "#" },
+      { name: "Geometria: Áreas", tag: "πr²", color: "c-soft", url: "#" },
+      { name: "Geometria: Perímetro", tag: "Medidas", color: "c-mix", url: "#" },
+      { name: "Equações do 1º grau", tag: "x", color: "c-soft", url: "#" },
+      { name: "Expressões algébricas", tag: "Simplificar", color: "c-lime", url: "#" },
+      { name: "Porcentagem", tag: "%", color: "c-mix", url: "#" },
+      { name: "Problemas com gráficos", tag: "Leitura", color: "c-soft", url: "#" },
+      { name: "Lógica e Sequências", tag: "Raciocínio", color: "c-lime", url: "#" },
+      { name: "Desafios rápidos (5 min)", tag: "Aquecimento", color: "c-mix", url: "#" }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    function setSession(on){
+      localStorage.setItem(KEY_SESSION, JSON.stringify({ on: !!on }));
+    }
+    function getSession(){
+      try { return JSON.parse(localStorage.getItem(KEY_SESSION)) || { on:false }; }
+      catch { return { on:false }; }
+    }
+
+    function openLogin(){
+      $("backdrop").style.display = "flex";
+      $("msg").textContent = "";
+      $("msg").className = "msg";
+      setTimeout(() => $("user").focus(), 50);
+    }
+    function closeLogin(){
+      $("backdrop").style.display = "none";
+    }
+
+    function showHome(){
+      $("homeView").style.display = "block";
+      $("activitiesView").style.display = "none";
+    }
+    function showActivities(){
+      $("homeView").style.display = "none";
+      $("activitiesView").style.display = "block";
+      renderGrid();
+    }
+
+    function escapeHtml(str){
+      return String(str).replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function renderGrid(){
+      const grid = $("grid");
+      grid.innerHTML = "";
+      $("countPill").textContent = `${activities.length} atividades`;
+
+      activities.forEach((a) => {
+        const tile = document.createElement("div");
+        tile.className = `tile ${a.color}`;
+        tile.tabIndex = 0;
+        tile.setAttribute("role", "button");
+        tile.setAttribute("aria-label", `Abrir atividade ${a.name}`);
+
+        tile.innerHTML = `
+          <div class="tileInner">
+            <div class="tileName">${escapeHtml(a.name)}</div>
+            <div class="tileMeta">
+              <span class="tag2">${escapeHtml(a.tag || "Matemática")}</span>
+              <span class="go">↗</span>
+            </div>
+          </div>
+        `;
+
+        const open = () => {
+          // Se você colocar links reais, troque a.url para o link e use window.open(a.url,...)
+          alert(`Abrindo: ${a.name}\n(Depois eu ligo isso ao link real do seu site.)`);
+        };
+
+        tile.addEventListener("click", open);
+        tile.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") open();
+        });
+
+        grid.appendChild(tile);
+      });
+    }
+
+    function login(){
+      const u = $("user").value.trim();
+      const p = $("pass").value.trim();
+
+      if (!u || !p){
+        $("msg").textContent = "Preencha e-mail e senha.";
+        $("msg").className = "msg bad";
+        return;
+      }
+
+      if (u === AUTH.login && p === AUTH.pass){
+        $("msg").textContent = "Acesso liberado.";
+        $("msg").className = "msg ok";
+        setSession(true);
+        setTimeout(() => {
+          closeLogin();
+          showActivities();
+        }, 140);
+      } else {
+        $("msg").textContent = "E-mail ou senha inválidos.";
+        $("msg").className = "msg bad";
+      }
+    }
+
+    function logout(){
+      setSession(false);
+      showHome();
+    }
+
+    function init(){
+      $("openLoginBtn").addEventListener("click", openLogin);
+      $("enterBtn").addEventListener("click", openLogin);
+      $("closeLogin").addEventListener("click", closeLogin);
+      $("backdrop").addEventListener("click", (e) => { if (e.target === $("backdrop")) closeLogin(); });
+
+      $("fill").addEventListener("click", () => {
+        $("user").value = AUTH.login;
+        $("pass").value = AUTH.pass;
+        $("msg").textContent = "Credenciais preenchidas.";
+        $("msg").className = "msg ok";
+      });
+
+      $("login").addEventListener("click", login);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && $("backdrop").style.display === "flex") closeLogin();
+        if (e.key === "Enter" && $("backdrop").style.display === "flex") login();
+      });
+
+      $("scrollToGrid").addEventListener("click", () => openLogin());
+      $("toTopics").addEventListener("click", () => alert("Aqui você pode abrir uma página de conteúdos/tópicos."));
+
+      // troca o botão "Entrar" para "Sair" quando logado
+      const syncActions = () => {
+        const s = getSession();
+        if (s.on){
+          $("enterBtn").textContent = "Sair";
+          $("enterBtn").classList.add("dark");
+          $("enterBtn").onclick = logout;
+          $("openLoginBtn").style.display = "none";
+          showActivities();
+        } else {
+          $("enterBtn").textContent = "Entrar";
+          $("enterBtn").classList.add("dark");
+          $("enterBtn").onclick = openLogin;
+          $("openLoginBtn").style.display = "inline-flex";
+          showHome();
+        }
+      };
+
+      syncActions();
+    }
+
+    init();
+  </script>
+</body>
+</html>
